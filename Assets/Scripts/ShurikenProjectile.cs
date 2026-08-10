@@ -3,6 +3,9 @@ using UnityEngine;
 public class ShurikenProjectile : MonoBehaviour
 {
     [SerializeField]
+    private int damage = 1;
+
+    [SerializeField]
     private float speed = 10.0f;
 
     [SerializeField]
@@ -42,8 +45,10 @@ public class ShurikenProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        Monster monster = other.GetComponent<Monster>();
+        if (null != monster)
         {
+            monster.TakeDamage(damage);
             Destroy(gameObject);
         }
     }

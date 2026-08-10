@@ -3,6 +3,9 @@ using UnityEngine;
 public class ArrowProjectile : MonoBehaviour
 {
     [SerializeField]
+    private int damage = 1;
+
+    [SerializeField]
     private float speed = 12.0f;
 
     [SerializeField]
@@ -42,8 +45,10 @@ public class ArrowProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        Monster monster = other.GetComponent<Monster>();
+        if (null != monster)
         {
+            monster.TakeDamage(damage);
             Destroy(gameObject);
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -21,18 +22,28 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float rollDuration = 0.5f;
 
+    [Header("Combat")]
+    [SerializeField] private int maxHealth = 5;
+    [SerializeField] private int rollDamage = 2;
+    [SerializeField] private float rollHitRadius = 0.55f;
+    [SerializeField] private float damageInvincibility = 0.6f;
+
     private TileMap tileMap;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private bool isAttacking;
     private bool isRolling;
     private bool isUsingSkill;
+    private bool isDead;
+    private int health;
+    private float invincibilityRemaining;
     private Vector2 lastMoveDirection = Vector2.right;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        health = maxHealth;
     }
 
     private void SetMoving(bool moving)
@@ -47,12 +58,20 @@ public class Player : MonoBehaviour
 
     public void Init(TileMap tileMap, Vector2 startPosition)
     {
+        Time.timeScale = 1.0f;
         this.tileMap = tileMap;
         transform.position = new Vector3(startPosition.x, startPosition.y, 0.0f);
     }
 
     private void Update()
     {
+        invincibilityRemaining = Mathf.Max(0.0f, invincibilityRemaining - Time.deltaTime);
+
+        if (true == isDead || true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
         if (null == tileMap)
         {
             return;
@@ -265,7 +284,7 @@ else
         isUsingSkill = true;
 
         animator.speed = 1.0f;
-        animator.SetTrigger("Skill");
+        animator.SetTrigger("skill");
 
         yield return new WaitForSeconds(0.3f);
 
@@ -284,7 +303,16 @@ else
 
         yield return new WaitForSeconds(0.3f);
 
-        ThrowBasicProjectile();
+        if (null == shurikenPrefab && null == arrowPrefab)
+        {
+            Vector2 attackCenter =
+                (Vector2)transform.position + lastMoveDirection * 0.6f;
+            DamageMonsters(attackCenter, 0.75f, 1);
+        }
+        else
+        {
+            ThrowBasicProjectile();
+        }
 
         yield return new WaitForSeconds(0.5f);
         if (null == shurikenPrefab && null == arrowPrefab)
@@ -302,11 +330,82 @@ else
     animator.speed = 1.0f;
     animator.SetTrigger("Skill");
 
-    yield return new WaitForSeconds(0.6f);
+    yield return new WaitForSeconds(0.3f);
+
+    DamageMonsters(transform.position, 1.25f, 2);
+
+    yield return new WaitForSeconds(0.3f);
 
     animator.Play("mage_walk");
     isUsingSkill = false;
 }
+
+    private void DamageMonsters(Vector2 center, float hitRadius, int damage)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(center, hitRadius);
+        foreach (Collider2D hit in hits)
+        {
+            Monster monster = hit.GetComponent<Monster>();
+            if (null != monster)
+            {
+                monster.TakeDamage(damage);
+            }
+        }
+    }
+
+    private void DamageMonstersOnce(
+        Vector2 center,
+        float hitRadius,
+        int damage,
+        HashSet<Monster> damagedMonsters
+    )
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(center, hitRadius);
+        foreach (Collider2D hit in hits)
+        {
+            Monster monster = hit.GetComponent<Monster>();
+            if (null == monster || damagedMonsters.Contains(monster))
+            {
+                continue;
+            }
+
+            damagedMonsters.Add(monster);
+            monster.TakeDamage(damage);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (true == isDead || true == isRolling || 0.0f < invincibilityRemaining || 0 >= damage)
+        {
+            return;
+        }
+
+        health = Mathf.Max(0, health - damage);
+        invincibilityRemaining = damageInvincibility;
+
+        if (0 >= health)
+        {
+            isDead = true;
+            SetMoving(false);
+            GameEndUI.ShowGameOver();
+        }
+    }
+
+    private void OnGUI()
+    {
+        if (true == isDead || true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
+        GUIStyle healthStyle = new GUIStyle(GUI.skin.label);
+        healthStyle.fontSize = 24;
+        healthStyle.fontStyle = FontStyle.Bold;
+        healthStyle.normal.textColor = Color.white;
+        GUI.Label(new Rect(24.0f, 18.0f, 220.0f, 42.0f), $"HP  {health} / {maxHealth}", healthStyle);
+    }
+
     private IEnumerator Roll()
     {
         isRolling = true;
@@ -315,6 +414,7 @@ else
         animator.SetTrigger("Roll");
 
         Vector2 rollDirection = lastMoveDirection.normalized;
+        HashSet<Monster> damagedMonsters = new HashSet<Monster>();
 
         float elapsedTime = 0.0f;
 
@@ -336,6 +436,8 @@ else
                 nextPosition.y,
                 0.0f
             );
+
+            DamageMonstersOnce(transform.position, rollHitRadius, rollDamage, damagedMonsters);
 
             Camera camera = Camera.main;
 

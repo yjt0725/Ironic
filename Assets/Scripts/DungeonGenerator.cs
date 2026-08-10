@@ -20,11 +20,33 @@ public class DungeonGenerator : MonoBehaviour
     private DungeonRenderer dungeonRenderer;
     [SerializeField] private GameObject[] playerPrefabs;
 
+    [Header("몬스터")]
+    [SerializeField, Min(1)] private int minimumMonstersPerRoom = 1;
+    [SerializeField, Min(1)] private int maximumMonstersPerRoom = 2;
+    [SerializeField, Range(0.0f, 1.0f)] private float monsterRoomSpawnChance = 0.75f;
+
     private Player player;
+    private readonly List<Monster> monsters = new List<Monster>();
+    private bool monitorMonsterClear;
 
     private void Start()
     {
         Generate();
+    }
+
+    private void Update()
+    {
+        if (false == monitorMonsterClear || true == GameEndUI.IsShowing)
+        {
+            return;
+        }
+
+        monsters.RemoveAll(monster => null == monster);
+        if (0 == monsters.Count)
+        {
+            monitorMonsterClear = false;
+            GameEndUI.ShowClear();
+        }
     }
 
     public void Generate()
@@ -66,6 +88,7 @@ public class DungeonGenerator : MonoBehaviour
         dungeonRenderer.Render(tileMap, rooms);
 
         SpawnPlayer();
+        SpawnMonsters();
     }
 
     private void CreateRooms(WeightRandom<int> roomSizeWeightRandom, WeightRandom<Tuple<float, float>> ratioWeightRandom)
@@ -667,6 +690,123 @@ public class DungeonGenerator : MonoBehaviour
         );
 
         player.Init(tileMap, spawnPosition);
+    }
+
+    private void SpawnMonsters()
+    {
+        ClearMonsters();
+
+        if (null == player || null == tileMap || 0 == rooms.Count)
+        {
+            return;
+        }
+
+        Block playerRoom = FindCenterRoom();
+        HashSet<int> usedTiles = new HashSet<int>();
+
+        foreach (Block room in rooms)
+        {
+            if (room == playerRoom || UnityEngine.Random.value > monsterRoomSpawnChance)
+            {
+                continue;
+            }
+
+            int minimum = Mathf.Max(1, minimumMonstersPerRoom);
+            int maximum = Mathf.Max(minimum, maximumMonstersPerRoom);
+            int count = UnityEngine.Random.Range(minimum, maximum + 1);
+
+            for (int i = 0; i < count; i++)
+            {
+                Tile spawnTile = FindMonsterSpawnTile(room, usedTiles);
+                if (null == spawnTile)
+                {
+                    continue;
+                }
+
+                usedTiles.Add(spawnTile.index);
+
+                int monsterType = UnityEngine.Random.Range(1, 5);
+                GameObject monsterObject = new GameObject($"Monster{monsterType}_{monsters.Count}");
+                monsterObject.transform.parent = transform;
+
+                SpriteRenderer renderer = monsterObject.AddComponent<SpriteRenderer>();
+                renderer.sortingOrder = 19;
+
+                CircleCollider2D collider = monsterObject.AddComponent<CircleCollider2D>();
+                collider.isTrigger = true;
+                collider.radius = 0.3f;
+
+                Monster monster = monsterObject.AddComponent<Monster>();
+                Vector2 spawnPosition = new Vector2(
+                    spawnTile.rect.x + 0.5f,
+                    spawnTile.rect.y + 0.5f
+                );
+
+                monster.Init(tileMap, spawnPosition, player, monsterType);
+                monsters.Add(monster);
+            }
+        }
+
+        monitorMonsterClear = 0 < monsters.Count;
+    }
+
+    private Tile FindMonsterSpawnTile(Block room, HashSet<int> usedTiles)
+    {
+        int xMin = (int)room.rect.xMin + 1;
+        int xMax = (int)room.rect.xMax - 1;
+        int yMin = (int)room.rect.yMin + 1;
+        int yMax = (int)room.rect.yMax - 1;
+
+        if (xMin >= xMax || yMin >= yMax)
+        {
+            return null;
+        }
+
+        for (int attempt = 0; attempt < 40; attempt++)
+        {
+            int x = UnityEngine.Random.Range(xMin, xMax);
+            int y = UnityEngine.Random.Range(yMin, yMax);
+            Tile tile = tileMap.GetTile(x, y);
+
+            if (null == tile || Tile.Type.Floor != tile.type)
+            {
+                continue;
+            }
+
+            if (
+                null != tile.door
+                || PropBlock.IsBlocked(tile.index)
+                || usedTiles.Contains(tile.index)
+            )
+            {
+                continue;
+            }
+
+            Vector2 position = new Vector2(tile.rect.x + 0.5f, tile.rect.y + 0.5f);
+            if (3.0f > Vector2.Distance(position, player.transform.position))
+            {
+                continue;
+            }
+
+            return tile;
+        }
+
+        return null;
+    }
+
+    private void ClearMonsters()
+    {
+        monitorMonsterClear = false;
+
+        foreach (Monster monster in monsters)
+        {
+            if (null != monster)
+            {
+                GameObject.DestroyImmediate(monster.gameObject);
+            }
+        }
+
+        monsters.Clear();
     }
 
     private Block FindCenterRoom()
