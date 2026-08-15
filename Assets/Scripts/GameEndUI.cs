@@ -36,12 +36,12 @@ public class GameEndUI : MonoBehaviour
 
     public static void ShowClear()
     {
-        EnsureInstance().Show("DUNGEON CLEAR!");
+        EnsureInstance().Show("\uB358\uC804 \uD074\uB9AC\uC5B4!");
     }
 
     public static void ShowGameOver()
     {
-        EnsureInstance().Show("GAME OVER");
+        EnsureInstance().Show("\uAC8C\uC784 \uC624\uBC84");
     }
 
     private static GameEndUI EnsureInstance()
@@ -81,7 +81,7 @@ public class GameEndUI : MonoBehaviour
         GUI.color = previousColor;
 
         float panelWidth = 420.0f;
-        float panelHeight = 385.0f;
+        float panelHeight = 405.0f;
         float x = Screen.width * 0.5f - panelWidth * 0.5f;
         float y = Screen.height * 0.5f - panelHeight * 0.5f;
 
@@ -89,7 +89,7 @@ public class GameEndUI : MonoBehaviour
         titleStyle.fontSize = 42;
         titleStyle.fontStyle = FontStyle.Bold;
         titleStyle.alignment = TextAnchor.MiddleCenter;
-        titleStyle.normal.textColor = resultText == "GAME OVER"
+        titleStyle.normal.textColor = resultText == "\uAC8C\uC784 \uC624\uBC84"
             ? new Color(1.0f, 0.25f, 0.25f)
             : new Color(1.0f, 0.82f, 0.25f);
 
@@ -97,21 +97,32 @@ public class GameEndUI : MonoBehaviour
         buttonStyle.fontSize = 22;
         buttonStyle.fontStyle = FontStyle.Bold;
 
-        GUI.Label(new Rect(x, y, panelWidth, 90.0f), resultText, titleStyle);
+        GUI.Label(new Rect(x, y, panelWidth, 72.0f), resultText, titleStyle);
 
-        if (GUI.Button(new Rect(x + 70.0f, y + 120.0f, panelWidth - 140.0f, 58.0f), "RETRY", buttonStyle))
+        GUIStyle recordStyle = new GUIStyle(GUI.skin.label);
+        recordStyle.fontSize = 20;
+        recordStyle.fontStyle = FontStyle.Bold;
+        recordStyle.alignment = TextAnchor.MiddleCenter;
+        recordStyle.normal.textColor = Color.white;
+        GUI.Label(
+            new Rect(x, y + 72.0f, panelWidth, 38.0f),
+            $"\uB09C\uC774\uB3C4 {GameData.GetDifficultyName()}  |  \uAE30\uB85D {GameData.FormatElapsedTime()}",
+            recordStyle
+        );
+
+        if (GUI.Button(new Rect(x + 70.0f, y + 125.0f, panelWidth - 140.0f, 58.0f), "\uB2E4\uC2DC \uC2DC\uC791", buttonStyle))
         {
             Time.timeScale = 1.0f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        if (GUI.Button(new Rect(x + 70.0f, y + 195.0f, panelWidth - 140.0f, 58.0f), "TITLE", buttonStyle))
+        if (GUI.Button(new Rect(x + 70.0f, y + 200.0f, panelWidth - 140.0f, 58.0f), "\uC9C1\uC5C5 \uC120\uD0DD", buttonStyle))
         {
             Time.timeScale = 1.0f;
             SceneManager.LoadScene(titleSceneName);
         }
 
-        if (GUI.Button(new Rect(x + 70.0f, y + 270.0f, panelWidth - 140.0f, 58.0f), "EXIT", buttonStyle))
+        if (GUI.Button(new Rect(x + 70.0f, y + 275.0f, panelWidth - 140.0f, 58.0f), "\uAC8C\uC784 \uC885\uB8CC", buttonStyle))
         {
             Time.timeScale = 1.0f;
 

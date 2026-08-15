@@ -61,6 +61,7 @@ public class Monster : MonoBehaviour
         player = target;
         monsterType = Mathf.Clamp(typeNumber, 1, 4);
         config = GetConfig(monsterType);
+        config.attackCooldown *= GameData.GetMonsterAttackCooldownMultiplier();
         health = config.health;
         transform.position = new Vector3(startPosition.x, startPosition.y, 0.0f);
         gameObject.name = $"Monster{monsterType}";
@@ -221,7 +222,7 @@ public class Monster : MonoBehaviour
             int damage = AnimationState.Special == state
                 ? config.specialAttackDamage
                 : config.attackDamage;
-            player.TakeDamage(damage);
+            player.TakeDamage(GameData.GetMonsterAttackDamage(damage));
         }
     }
 

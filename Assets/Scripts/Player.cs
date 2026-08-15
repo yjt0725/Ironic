@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int rollDamage = 2;
     [SerializeField] private float rollHitRadius = 0.55f;
     [SerializeField] private float damageInvincibility = 0.6f;
+    [SerializeField] private float skillCooldown = 3.0f;
 
     private TileMap tileMap;
     private Animator animator;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
     private bool isDead;
     private int health;
     private float invincibilityRemaining;
+    private float skillCooldownRemaining;
     private Vector2 lastMoveDirection = Vector2.right;
 
     private void Awake()
@@ -59,6 +61,7 @@ public class Player : MonoBehaviour
     public void Init(TileMap tileMap, Vector2 startPosition)
     {
         Time.timeScale = 1.0f;
+        GameData.elapsedTime = 0.0f;
         this.tileMap = tileMap;
         transform.position = new Vector3(startPosition.x, startPosition.y, 0.0f);
     }
@@ -66,6 +69,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         invincibilityRemaining = Mathf.Max(0.0f, invincibilityRemaining - Time.deltaTime);
+        skillCooldownRemaining = Mathf.Max(0.0f, skillCooldownRemaining - Time.deltaTime);
 
         if (true == isDead || true == GameEndUI.IsShowing)
         {
@@ -76,12 +80,22 @@ public class Player : MonoBehaviour
         {
             return;
         }
+
+        GameData.elapsedTime += Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Z) && false == isAttacking && false == isRolling && false == isUsingSkill)
         {
             StartCoroutine(Attack());
         }
-        if (Input.GetKeyDown(KeyCode.X) && false == isRolling && false == isAttacking && false == isUsingSkill)
+        if (
+            Input.GetKeyDown(KeyCode.X)
+            && false == isRolling
+            && false == isAttacking
+            && false == isUsingSkill
+            && 0.0f >= skillCooldownRemaining
+        )
         {
+            skillCooldownRemaining = skillCooldown;
+
             if (null != arrowPrefab)
 {
     StartCoroutine(ScatterShot());
@@ -403,7 +417,34 @@ else
         healthStyle.fontSize = 24;
         healthStyle.fontStyle = FontStyle.Bold;
         healthStyle.normal.textColor = Color.white;
-        GUI.Label(new Rect(24.0f, 18.0f, 220.0f, 42.0f), $"HP  {health} / {maxHealth}", healthStyle);
+        GUI.Label(new Rect(24.0f, 18.0f, 220.0f, 42.0f), $"\uCCB4\uB825  {health} / {maxHealth}", healthStyle);
+
+        GUIStyle cooldownStyle = new GUIStyle(GUI.skin.label);
+        cooldownStyle.fontSize = 18;
+        cooldownStyle.fontStyle = FontStyle.Bold;
+        cooldownStyle.normal.textColor = 0.0f >= skillCooldownRemaining
+            ? new Color(0.35f, 1.0f, 0.45f, 1.0f)
+            : new Color(1.0f, 0.78f, 0.25f, 1.0f);
+
+        string cooldownText = 0.0f >= skillCooldownRemaining
+            ? "X  \uC0AC\uC6A9 \uAC00\uB2A5"
+            : $"X  {skillCooldownRemaining:0.0}\uCD08";
+        GUI.Label(new Rect(24.0f, 52.0f, 220.0f, 34.0f), cooldownText, cooldownStyle);
+
+        GUIStyle infoStyle = new GUIStyle(GUI.skin.label);
+        infoStyle.fontSize = 18;
+        infoStyle.fontStyle = FontStyle.Bold;
+        infoStyle.normal.textColor = new Color(0.72f, 0.9f, 1.0f, 1.0f);
+        GUI.Label(
+            new Rect(24.0f, 82.0f, 260.0f, 32.0f),
+            $"\uACBD\uACFC \uC2DC\uAC04  {GameData.FormatElapsedTime()}",
+            infoStyle
+        );
+        GUI.Label(
+            new Rect(24.0f, 110.0f, 260.0f, 32.0f),
+            $"\uB09C\uC774\uB3C4  {GameData.GetDifficultyName()}",
+            infoStyle
+        );
     }
 
     private IEnumerator Roll()
