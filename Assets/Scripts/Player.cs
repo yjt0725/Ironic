@@ -38,9 +38,27 @@ public class Player : MonoBehaviour
     [Tooltip("화살이 생기는 거리. 플레이어 몸에서 이만큼 앞에 나온다. 너무 작으면 붙어 있는 몬스터에게 즉시 맞아 화살이 보이지 않는다.")]
     private float arrowSpawnDistance = 1.0f;
 
+    [Header("도적 X - 지면 융기")]
+    [SerializeField] private int groundSpikeDamage = 2;
+
     [SerializeField]
-    [Tooltip("도적 X - 지면에서 솟는 원거리 공격. 도적 프리팹에만 넣는다.")]
-    private GameObject groundSpikePrefab;
+    [Tooltip("돌기둥이 앞으로 나아가는 속도. 0이면 제자리에서 솟는다.")]
+    private float groundSpikeSpeed = 0.0f;
+
+    [SerializeField]
+    [Tooltip("도적 앞쪽 어느 거리에서 솟을지.")]
+    private float groundSpikeForward = 1.2f;
+
+    [SerializeField]
+    [Tooltip("캐릭터 원점에서 발밑까지의 거리. 피벗이 몸통 중앙이라 이만큼 내려야 바닥에 붙는다.")]
+    private float groundSpikeFootDrop = 0.5f;
+
+    [SerializeField] private float groundSpikeRange = 5.0f;
+    [SerializeField] private float groundSpikeFps = 14.0f;
+
+    [SerializeField]
+    [Tooltip("이펙트 스프라이트의 Pixels Per Unit. 캐릭터와 같은 값으로 맞춘다.")]
+    private float groundSpikePixelsPerUnit = 108.0f;
 
     [Header("근접 공격")]
     [SerializeField]
@@ -58,6 +76,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     [Tooltip("마법사 강타는 판정 범위가 더 넓다.")]
     private float mageSmashRadiusBonus = 0.9f;
+
+    [Header("마법사 X - 타격 이펙트")]
+    [SerializeField]
+    [Tooltip("이펙트가 터지는 위치. 캐릭터 앞쪽 거리.")]
+    private float mageSmashEffectForward = 1.0f;
+
+    [SerializeField] private float mageSmashEffectFps = 18.0f;
+
+    [SerializeField]
+    [Tooltip("이펙트 스프라이트의 Pixels Per Unit. 값이 클수록 작아진다.")]
+    private float mageSmashPixelsPerUnit = 108.0f;
 
     // --- 공격 애니메이션 타이밍 ---------------------------------------
     // 클립은 12 FPS 9프레임 = 0.75초. 팔이 완전히 뻗는 6번째 프레임이
@@ -349,6 +378,7 @@ public class Player : MonoBehaviour
                 break;
             case CharacterClass.Mage:
                 MeleeHit(mageSmashDamage, meleeRadius + mageSmashRadiusBonus);
+                SpawnMageSmashEffect();
                 break;
         }
 
@@ -388,30 +418,53 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void FireGroundSpike()
+    private void SpawnMageSmashEffect()
     {
-        if (null == groundSpikePrefab)
+        Vector2 facing = lastMoveDirection.normalized;
+        if (0.0f == facing.sqrMagnitude)
         {
-            return;
+            facing = Vector2.right;
         }
-
-        Vector2 direction = lastMoveDirection.normalized;
 
         Vector3 spawnPosition =
             transform.position
-            + (Vector3)(direction * meleeOffset);
+            + (Vector3)(facing * mageSmashEffectForward);
 
-        GameObject spike = Instantiate(
-            groundSpikePrefab,
-            spawnPosition,
-            Quaternion.identity
-        );
+        GameObject effectObject = new GameObject("MageSmashEffect");
+        effectObject.transform.position = spawnPosition;
 
-        ArrowProjectile projectile = spike.GetComponent<ArrowProjectile>();
-        if (null != projectile)
+        MageSmashEffect effect = effectObject.AddComponent<MageSmashEffect>();
+        effect.Init(facing, mageSmashEffectFps, mageSmashPixelsPerUnit);
+    }
+
+    private void FireGroundSpike()
+    {
+        Vector2 direction = lastMoveDirection.normalized;
+        if (0.0f == direction.sqrMagnitude)
         {
-            projectile.Initialize(direction);
+            direction = Vector2.right;
         }
+
+        // 피벗이 몸통 중앙이라 그대로 쓰면 돌기둥이 공중에 뜬다.
+        // 앞으로 밀고 아래로 내려서 발밑 바닥에 맞춘다.
+        Vector3 spawnPosition =
+            transform.position
+            + (Vector3)(direction * groundSpikeForward)
+            + Vector3.down * groundSpikeFootDrop;
+
+        // 프리팹 없이 코드로 만든다. 스프라이트는 Resources에서 불러온다.
+        GameObject spike = new GameObject("GroundSpike");
+        spike.transform.position = spawnPosition;
+
+        GroundSpikeEffect effect = spike.AddComponent<GroundSpikeEffect>();
+        effect.Init(
+            direction,
+            groundSpikeDamage,
+            groundSpikeSpeed,
+            groundSpikeRange,
+            groundSpikeFps,
+            groundSpikePixelsPerUnit
+        );
     }
 
     private void FireArrowSpread()

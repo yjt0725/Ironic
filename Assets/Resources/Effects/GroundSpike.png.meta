@@ -1,22 +1,34 @@
 fileFormatVersion: 2
-guid: 7c91ffd3bf2a63a41a97f7035227419f
+guid: 3de57728bcc8d354f9efcba0e35ab60e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 292095230276111468
-    second: Menu.Quit_0
+      213: -4167881154402865046
+    second: GroundSpike_0
   - first:
-      213: -2423152047061663895
-    second: Menu.Quit_1
+      213: -2971874973397552413
+    second: GroundSpike_1
   - first:
-      213: 9211074310487769848
-    second: Menu.Quit_2
+      213: -6479502011012820976
+    second: GroundSpike_2
   - first:
-      213: -2404780595502825062
-    second: Menu.Quit_3
+      213: -1759404789460436369
+    second: GroundSpike_3
   - first:
-      213: -5481897019652912859
-    second: Menu.Quit_4
+      213: -3138312297325438564
+    second: GroundSpike_4
+  - first:
+      213: -6751719846447960599
+    second: GroundSpike_5
+  - first:
+      213: 7069804826261463497
+    second: GroundSpike_6
+  - first:
+      213: 6834161320310733416
+    second: GroundSpike_7
+  - first:
+      213: -5284359366560972976
+    second: GroundSpike_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +72,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -84,7 +96,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -125,13 +137,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menu.Quit_0
+      name: GroundSpike_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 0
-        width: 123
-        height: 125
+        x: 45
+        y: 35
+        width: 166
+        height: 88
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +152,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c6c8139701bbd0400800000000000000
-      internalID: 292095230276111468
+      spriteID: a60b5c52c26b826c0800000000000000
+      internalID: -4167881154402865046
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Menu.Quit_1
+      name: GroundSpike_1
       rect:
         serializedVersion: 2
-        x: 126
-        y: 7
-        width: 69
-        height: 109
+        x: 301
+        y: 35
+        width: 166
+        height: 98
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,20 +174,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 96ff0263d0c3f5ed0800000000000000
-      internalID: -2423152047061663895
+      spriteID: 3e2f3c51577c1c6d0800000000000000
+      internalID: -2971874973397552413
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Menu.Quit_2
+      name: GroundSpike_2
       rect:
         serializedVersion: 2
-        x: 196
-        y: 0
-        width: 51
-        height: 125
+        x: 557
+        y: 35
+        width: 164
+        height: 110
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +196,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f28954784f44df70800000000000000
-      internalID: 9211074310487769848
+      spriteID: 010d628304f2416a0800000000000000
+      internalID: -6479502011012820976
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Menu.Quit_3
+      name: GroundSpike_3
       rect:
         serializedVersion: 2
-        x: 241
-        y: 8
-        width: 70
-        height: 108
+        x: 809
+        y: 35
+        width: 166
+        height: 126
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,20 +218,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a914d4a1ac080aed0800000000000000
-      internalID: -2404780595502825062
+      spriteID: f6af61c6aa65597e0800000000000000
+      internalID: -1759404789460436369
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Menu.Quit_4
+      name: GroundSpike_4
       rect:
         serializedVersion: 2
-        x: 312
-        y: 0
-        width: 36
-        height: 125
+        x: 1061
+        y: 35
+        width: 176
+        height: 142
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,8 +240,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 529c05874b36ce3b0800000000000000
-      internalID: -5481897019652912859
+      spriteID: c995da3d7997274d0800000000000000
+      internalID: -3138312297325438564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundSpike_5
+      rect:
+        serializedVersion: 2
+        x: 1317
+        y: 35
+        width: 182
+        height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eda38162921d42a0800000000000000
+      internalID: -6751719846447960599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundSpike_6
+      rect:
+        serializedVersion: 2
+        x: 1571
+        y: 35
+        width: 186
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c128a4380efc1260800000000000000
+      internalID: 7069804826261463497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundSpike_7
+      rect:
+        serializedVersion: 2
+        x: 1829
+        y: 35
+        width: 184
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86af5da0381d7de50800000000000000
+      internalID: 6834161320310733416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundSpike_8
+      rect:
+        serializedVersion: 2
+        x: 2087
+        y: 35
+        width: 182
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05fff92672f2aa6b0800000000000000
+      internalID: -5284359366560972976
       vertices: []
       indices: 
       edges: []
@@ -248,11 +348,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Menu.Quit_0: 292095230276111468
-      Menu.Quit_1: -2423152047061663895
-      Menu.Quit_2: 9211074310487769848
-      Menu.Quit_3: -2404780595502825062
-      Menu.Quit_4: -5481897019652912859
+      GroundSpike_0: -4167881154402865046
+      GroundSpike_1: -2971874973397552413
+      GroundSpike_2: -6479502011012820976
+      GroundSpike_3: -1759404789460436369
+      GroundSpike_4: -3138312297325438564
+      GroundSpike_5: -6751719846447960599
+      GroundSpike_6: 7069804826261463497
+      GroundSpike_7: 6834161320310733416
+      GroundSpike_8: -5284359366560972976
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

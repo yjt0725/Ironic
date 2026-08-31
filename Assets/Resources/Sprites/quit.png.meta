@@ -1,22 +1,16 @@
 fileFormatVersion: 2
-guid: 7c91ffd3bf2a63a41a97f7035227419f
+guid: 7035752174bb20e40b031d08649b37e4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 292095230276111468
-    second: Menu.Quit_0
+      213: 5398283193359031274
+    second: quit_0
   - first:
-      213: -2423152047061663895
-    second: Menu.Quit_1
+      213: 1336899241092420851
+    second: quit_1
   - first:
-      213: 9211074310487769848
-    second: Menu.Quit_2
-  - first:
-      213: -2404780595502825062
-    second: Menu.Quit_3
-  - first:
-      213: -5481897019652912859
-    second: Menu.Quit_4
+      213: -5410376967538941842
+    second: quit_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menu.Quit_0
+      name: quit_0
       rect:
         serializedVersion: 2
-        x: 7
+        x: 0
         y: 0
-        width: 123
-        height: 125
+        width: 195
+        height: 112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,42 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c6c8139701bbd0400800000000000000
-      internalID: 292095230276111468
+      spriteID: aeb502986fd8aea40800000000000000
+      internalID: 5398283193359031274
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Menu.Quit_1
+      name: quit_1
       rect:
         serializedVersion: 2
-        x: 126
-        y: 7
-        width: 69
-        height: 109
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 96ff0263d0c3f5ed0800000000000000
-      internalID: -2423152047061663895
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Menu.Quit_2
-      rect:
-        serializedVersion: 2
-        x: 196
+        x: 215
         y: 0
-        width: 51
-        height: 125
+        width: 107
+        height: 112
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f28954784f44df70800000000000000
-      internalID: 9211074310487769848
+      spriteID: 3f49dcdc6ce9d8210800000000000000
+      internalID: 1336899241092420851
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Menu.Quit_3
+      name: quit_2
       rect:
         serializedVersion: 2
-        x: 241
-        y: 8
-        width: 70
-        height: 108
+        x: 313
+        y: 6
+        width: 105
+        height: 106
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,30 +178,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a914d4a1ac080aed0800000000000000
-      internalID: -2404780595502825062
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Menu.Quit_4
-      rect:
-        serializedVersion: 2
-        x: 312
-        y: 0
-        width: 36
-        height: 125
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 529c05874b36ce3b0800000000000000
-      internalID: -5481897019652912859
+      spriteID: e60e2ec30da7ae4b0800000000000000
+      internalID: -5410376967538941842
       vertices: []
       indices: 
       edges: []
@@ -248,11 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Menu.Quit_0: 292095230276111468
-      Menu.Quit_1: -2423152047061663895
-      Menu.Quit_2: 9211074310487769848
-      Menu.Quit_3: -2404780595502825062
-      Menu.Quit_4: -5481897019652912859
+      quit_0: 5398283193359031274
+      quit_1: 1336899241092420851
+      quit_2: -5410376967538941842
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
